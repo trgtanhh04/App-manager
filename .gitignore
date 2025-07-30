@@ -35,3 +35,4 @@ backend/config/config.py
 
 frontend/.next
 frontend/node_modules
+backend/config.py
