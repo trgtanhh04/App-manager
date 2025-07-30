@@ -1,0 +1,37 @@
+from langchain.vectorstores import Chroma
+from langchain.embeddings import OpenAIEmbeddings
+from langchain.text_splitter import CharacterTextSplitter
+from config import CHROMA_PATH, EMBEDDING_MODEL_NAME, LLM_MODEL_NAME
+import os
+
+CHROMA_PATH = "chroma_db"
+
+def get_vectordb():
+    ebd = OpenAIEmbeddings(
+        model=EMBEDDING_MODEL_NAME
+    )
+    return Chroma(
+        collection_name='docs',
+        embedding_function=ebd,
+        persist_directory=CHROMA_PATH
+    )
+
+def add_to_vectordb(vector_db, text, file_path):
+    splitter = CharacterTextSplitter(
+        chunk_size=500,
+        chunk_overlap=50
+    )
+    chunks = splitter.split_text(text)
+    vector_db.add_texts(
+        texts=chunks,
+        metadatas=[{"source": file_path}] * len(chunks)
+    )
+    vector_db.persist()
+
+
+def get_retriever(vector_db):
+    return vector_db.as_retriever(
+        search_kwargs={
+            "k": 4
+        }
+    )
