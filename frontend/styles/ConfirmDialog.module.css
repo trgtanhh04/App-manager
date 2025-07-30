@@ -1,0 +1,167 @@
+/* Overlay */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1100;
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Dialog */
+.dialog {
+  background: white;
+  border-radius: 12px;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.2s ease-out;
+}
+
+@keyframes slideUp {
+  from { 
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Header */
+.header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 24px 24px 16px 24px;
+}
+
+.icon {
+  font-size: 24px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon.danger {
+  background: rgba(220, 53, 69, 0.1);
+}
+
+.icon.warning {
+  background: rgba(255, 193, 7, 0.1);
+}
+
+.icon.info {
+  background: rgba(0, 123, 255, 0.1);
+}
+
+.title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+/* Content */
+.content {
+  padding: 0 24px 24px 24px;
+}
+
+.message {
+  margin: 0;
+  color: #6c757d;
+  line-height: 1.5;
+  font-size: 14px;
+}
+
+/* Actions */
+.actions {
+  display: flex;
+  gap: 12px;
+  padding: 16px 24px 24px 24px;
+  border-top: 1px solid #e9ecef;
+}
+
+.cancelBtn,
+.confirmBtn {
+  flex: 1;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cancelBtn {
+  background: #f8f9fa;
+  color: #6c757d;
+  border: 1px solid #dee2e6;
+}
+
+.cancelBtn:hover {
+  background: #e9ecef;
+  color: #495057;
+}
+
+.confirmBtn {
+  color: white;
+}
+
+.confirmBtn.danger {
+  background: #dc3545;
+}
+
+.confirmBtn.danger:hover {
+  background: #c82333;
+}
+
+.confirmBtn.warning {
+  background: #ffc107;
+  color: #212529;
+}
+
+.confirmBtn.warning:hover {
+  background: #e0a800;
+}
+
+.confirmBtn.info {
+  background: #007bff;
+}
+
+.confirmBtn.info:hover {
+  background: #0056b3;
+}
+
+.cancelBtn:disabled,
+.confirmBtn:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .dialog {
+    margin: 20px;
+    width: calc(100% - 40px);
+  }
+  
+  .actions {
+    flex-direction: column;
+  }
+}

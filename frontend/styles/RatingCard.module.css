@@ -1,0 +1,45 @@
+.ratingCard {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  padding: 24px;
+  margin: 12px;
+  text-align: center;
+}
+
+.title {
+  margin: 0 0 20px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.ratingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ratingValue {
+  font-size: 48px;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 8px;
+}
+
+.ratingTrend {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.starIcon {
+  color: #f39c12;
+  font-size: 20px;
+  margin-right: 8px;
+}
+
+.trendText {
+  font-size: 14px;
+  color: #8b9dc3;
+}

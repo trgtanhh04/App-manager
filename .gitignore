@@ -1,0 +1,37 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*.so
+
+# Virtual env
+venv/
+env/
+
+# Environment variables
+.env
+
+# SQLite DBs, logs, etc (nếu dùng)
+*.sqlite3
+*.db
+*.log
+
+# VS Code settings (nếu không muốn đẩy lên)
+.vscode/
+
+# Ignore test cache
+.pytest_cache/
+
+# Ignore local config
+backend/config/config.py
+
+# Ignore output files
+*.out
+
+# Ignore Docker build cache
+*.tar
+
+*.__pycache__/
+*.__init__.py
+
+frontend/.next
+frontend/node_modules
