@@ -1,14 +1,16 @@
 from langchain.vectorstores import Chroma
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.text_splitter import CharacterTextSplitter
-from config import CHROMA_PATH, EMBEDDING_MODEL_NAME, LLM_MODEL_NAME
+from config import EMBEDDING_MODEL_NAME, OPENAI_API_KEY
 import os
 
 CHROMA_PATH = "chroma_db"
 
 def get_vectordb():
     ebd = OpenAIEmbeddings(
-        model=EMBEDDING_MODEL_NAME
+        model=EMBEDDING_MODEL_NAME,
+        openai_api_key=OPENAI_API_KEY
+
     )
     return Chroma(
         collection_name='docs',

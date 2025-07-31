@@ -1,5 +1,9 @@
 import os
-import fitz
+import sys
+# Thêm backend vào Python path để tránh xung đột với frontend
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', '..'))
+
+import pymupdf as fitz  # Import PyMuPDF với alias
 import pandas as pd
 import docx2txt
 from PIL import Image
@@ -52,3 +56,13 @@ def extract_text(file_path):
         print(f"Unsupported file type: {ext}")
         return None
     return text
+
+if __name__ == "__main__":
+    file_path = "E:\\App-manager\\backend\\scripts\\chatbot\\uploaded_files\\test1.docx"  
+    extracted_text = extract_text(file_path)
+    if extracted_text:
+        print("Extracted Text:")
+        print(extracted_text)
+    else:
+        print("Failed to extract text from the file.")
+# python backend/scripts/chatbot/utils/extractor.py

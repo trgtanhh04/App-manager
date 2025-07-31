@@ -5,7 +5,6 @@ from typing import Optional
 
 auth_router = APIRouter()
 
-# In-memory token storage (in production, use Redis or database)
 active_tokens = {}
 
 @auth_router.post("/login", response_model=AuthResponse)
@@ -14,7 +13,6 @@ async def login(payload: LoginRequest):
     if not user:
         raise HTTPException(status_code=401, detail="Invalid email or password")
     
-    # Generate token
     token = generate_token()
     user_id = str(user["_id"])
     active_tokens[token] = user_id
@@ -40,7 +38,6 @@ async def register(payload: RegisterRequest):
     if not result["success"]:
         raise HTTPException(status_code=400, detail=result["message"])
     
-    # Auto login after registration
     user = await get_user_by_id(result["user_id"])
     if user:
         token = generate_token()
@@ -101,7 +98,6 @@ async def get_current_user(authorization: Optional[str] = Header(None)):
         created_at=user.get("created_at")
     )
 
-# Helper function to verify token (for other routes)
 async def verify_token(authorization: Optional[str] = Header(None)):
     if not authorization or not authorization.startswith("Bearer "):
         raise HTTPException(status_code=401, detail="Token required")
