@@ -4,6 +4,8 @@ from scripts.chatbot.utils.extractor import extract_text
 from scripts.chatbot.utils.vectorstore import add_to_vectordb, get_retriever, get_vectordb
 from scripts.chatbot.utils.memory import add_message_to_memory, get_memory
 from scripts.chatbot.utils.qa_chain import get_qa_chain
+from schemas.chatbot_schema import ChatRequest
+
 import os
 import shutil
 import uuid
@@ -32,32 +34,41 @@ async def upload_file(
         raise HTTPException(status_code=400, detail="Failed to extract text from the file")
     
     global vectordb_collection
-    vectordb_collection = await get_vectordb()
-    await add_to_vectordb(vectordb_collection, text,  file_path)
+    vectordb_collection = get_vectordb()
+    add_to_vectordb(vectordb_collection, text, file_path)
 
     if session_id not in sessions:
-        sessions[session_id] = get_memory(session_id)
+        sessions[session_id] = get_memory()
 
     return {
         'message': 'File uploaded successfully',
+        'text': text
     }
 
 @chat_router.post("/ask")
-async def ask_question(request: Request):
-    data = await request.json()
-    query = data['question']
-    session_id = data['session_id']
+async def ask_question(request: ChatRequest):
+    query = request.question
+    session_id = request.session_id
 
     memory = sessions.setdefault(session_id, get_memory())
 
     if not vectordb_collection:
         raise HTTPException(status_code=500, detail="VectorDB not initialized")
-    retriever = await get_retriever(vectordb_collection)
+    retriever = get_retriever(vectordb_collection)
 
-    # Build the QA chain
-    qa_chain = await get_qa_chain(retriever, memory)
-    response = await qa_chain({
-        'query': query,
+    qa_chain = get_qa_chain(retriever)
+    
+    # Get chat history from memory for context
+    chat_history = ""
+    if memory.chat_memory.messages:
+        for msg in memory.chat_memory.messages[-4:]:  # Last 4 messages for context
+            if hasattr(msg, 'content'):
+                chat_history += f"{msg.content}\n"
+    
+    query_with_context = f"Chat History:\n{chat_history}\n\nCurrent Question: {query}"
+    
+    response = qa_chain.invoke({
+        'query': query_with_context,
     })
 
     add_message_to_memory(memory, 'user', query)
@@ -68,3 +79,4 @@ async def ask_question(request: Request):
         'history': memory.chat_memory.messages
     }
     
+

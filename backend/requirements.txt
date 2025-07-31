@@ -10,12 +10,14 @@ python-jose[cryptography]==3.3.0
 passlib[bcrypt]==1.7.4
 pytesseract
 Pillow
-fitz
+PyMuPDF
 docx2txt
 pandas
 openpyxl
-PyMuPDF
 langchain
+langchain-community
+langchain-openai
+langchain-chroma
 chromadb
 openai
 tiktoken
