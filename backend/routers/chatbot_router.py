@@ -15,7 +15,9 @@ chat_router = APIRouter()
 UPLOAD_FOLDER = 'scripts/chatbot/uploaded_files'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
+# In-memory
 sessions = {}
+vectordb_collection = None
 
 @chat_router.post("/upload")
 async def upload_file(
@@ -31,8 +33,12 @@ async def upload_file(
     if not text:
         raise HTTPException(status_code=400, detail="Failed to extract text from the file")
     
+    global vectordb_collection
+    vectordb_collection = get_vectordb()
+    add_to_vectordb(vectordb_collection, text, file_path)
 
-
+    if session_id not in sessions:
+        sessions[session_id] = get_memory()
 
     return {
         'message': 'File uploaded successfully',
@@ -44,14 +50,12 @@ async def ask_question(request: ChatRequest):
     query = request.question
     session_id = request.session_id
 
-    # Check if session has vectordb
-    if session_id not in session_vectordbs:
-        raise HTTPException(status_code=400, detail="No document uploaded for this session")
-    
     memory = sessions.setdefault(session_id, get_memory())
-    vectordb = session_vectordbs[session_id]
-    
-    retriever = get_retriever(vectordb)
+
+    if not vectordb_collection:
+        raise HTTPException(status_code=500, detail="VectorDB not initialized")
+    retriever = get_retriever(vectordb_collection)
+
     qa_chain = get_qa_chain(retriever)
     
     # Get chat history from memory for context
