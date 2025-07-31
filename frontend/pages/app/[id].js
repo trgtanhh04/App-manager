@@ -28,7 +28,15 @@ export default function AppDetail() {
       const result = await apiService.getAppDetail(id);
       
       if (result.success) {
-        setApp(result.data.app);
+        const appData = result.data.app;
+        
+        // If this is the Chatbot app, redirect to chatbot interface
+        if (appData.name === 'Chatbot') {
+          router.push('/apps/chatbot');
+          return;
+        }
+        
+        setApp(appData);
         setError(null);
       } else {
         setError("Failed to load app details");

@@ -1,0 +1,132 @@
+/* Main Chatbot Page Styles - Simplified */
+.pageContainer {
+  min-height: 100vh;
+  background: #f8fafc;
+}
+
+.mainContent {
+  display: flex;
+}
+
+.chatbotContent {
+  flex: 1;
+  padding: 20px;
+  margin-left: 250px; /* Sidebar width */
+}
+
+.chatbotLayout {
+  display: grid;
+  grid-template-columns: 400px 1fr;
+  gap: 20px;
+  height: calc(100vh - 140px); /* Full height minus header/padding */
+}
+
+.uploadSection {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.testMode {
+  display: flex;
+  justify-content: center;
+  margin: 16px 0;
+}
+
+.testModeBtn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.testModeBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.resetBtn {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+}
+
+.resetBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+}
+
+.uploadStatus {
+  padding: 16px;
+  border-radius: 8px;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+}
+
+.errorStatus {
+  padding: 16px;
+  border-radius: 8px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+}
+
+.successMessage {
+  color: #059669;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.errorMessage {
+  color: #dc2626;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.chatSection {
+  display: flex;
+  flex-direction: column;
+  min-height: 0; /* Important for flex child */
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .chatbotContent {
+    margin-left: 0;
+    padding: 16px;
+  }
+  
+  .chatbotLayout {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    height: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .chatbotLayout {
+    gap: 12px;
+  }
+  
+  .chatbotContent {
+    padding: 12px;
+  }
+}
