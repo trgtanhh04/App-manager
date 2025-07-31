@@ -1,38 +1,97 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
+*$py.class
 *.so
 
-# Virtual env
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
 venv/
 env/
-
-# Environment variables
+ENV/
+.venv/
 .env
 
-# SQLite DBs, logs, etc (nếu dùng)
+# Environment variables & secrets
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# SQLite databases & logs
 *.sqlite3
 *.db
 *.log
 
-# VS Code settings (nếu không muốn đẩy lên)
+# IDE settings
 .vscode/
+.idea/
+*.swp
+*.swo
+*~
 
-# Ignore test cache
+# Testing
 .pytest_cache/
+.coverage
+htmlcov/
+.tox/
 
-# Ignore local config
-backend/config/config.py
+# Jupyter Notebook
+.ipynb_checkpoints
 
-# Ignore output files
-*.out
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
 
-# Ignore Docker build cache
+# Docker
 *.tar
+.dockerignore
 
-*.__pycache__/
-*.__init__.py
+# Frontend specific
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/.vercel/
+frontend/package-lock.json
 
-frontend/.next
-frontend/node_modules
+# Backend specific  
 backend/config.py
+backend/.env
+backend/chroma_db/
+backend/scripts/chatbot/uploaded_files/
+
+# Chatbot runtime data
+**/uploaded_files/
+**/chroma_db/
+*.chroma
+
+# Ignore all __pycache__ recursively
+**/__pycache__/
+**/*.pyc
+**/*.pyo
