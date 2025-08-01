@@ -18,7 +18,7 @@ export const apiService = {
             }
 
             const data = await response.json();
-            return data;
+            return data
         } catch (error) {
             console.error("Error uploading file:", error);
             throw error;
@@ -39,6 +39,12 @@ export const apiService = {
             });
 
             if (!response.ok) {
+                if (response.status === 400) {
+                    const errorData = await response.json();
+                    if (errorData.detail && errorData.detail.includes("upload a document first")) {
+                        throw new Error("Vui lòng tải lên một tài liệu trước khi đặt câu hỏi! 📄");
+                    }
+                }
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
 

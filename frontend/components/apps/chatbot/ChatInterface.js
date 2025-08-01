@@ -1,22 +1,15 @@
-import { useState, useRef, useEffect } from 'react';
-import { FaPaperPlane, FaRobot, FaUser } from 'react-icons/fa';
+import { useRef, useEffect } from 'react';
+import { FaRobot } from 'react-icons/fa';
 import styles from '../../../styles/apps/chatbot/ChatInterface.module.css';
 import MessageBubble from './MessageBubble';
 import TypingIndicator from './TypingIndicator';
 
 export default function ChatInterface({ 
   messages, 
-  onSendMessage, 
   isLoading, 
-  sessionId,
-  isFileUploaded 
+  error
 }) {
-  const [message, setMessage] = useState('');
   const messagesEndRef = useRef(null);
-  const inputRef = useRef(null);
-
-  // Debug log
-  console.log('ChatInterface - isFileUploaded:', isFileUploaded, 'isLoading:', isLoading);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -26,105 +19,37 @@ export default function ChatInterface({
     scrollToBottom();
   }, [messages, isLoading]);
 
-  // Auto focus input when file is uploaded
-  useEffect(() => {
-    if (isFileUploaded && inputRef.current) {
-      inputRef.current.focus();
-    }
-  }, [isFileUploaded]);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (message.trim() && !isLoading) {
-      if (isFileUploaded) {
-        onSendMessage(message.trim(), sessionId);
-        setMessage('');
-      } else {
-        alert('Please upload a document first or use test mode!');
-      }
-    }
-  };
-
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      handleSubmit(e);
-    }
-  };
-
-  const handleInputClick = () => {
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
-  };
-
-
   return (
-    <div className={styles.chatContainer}>
-      <div className={styles.chatHeader}>
-        <div className={styles.headerInfo}>
-          <FaRobot className={styles.botIcon} />
-          <div>
-            <h3 className={styles.botName}>AI Assistant</h3>
-            <p className={styles.botStatus}>
-              {isFileUploaded ? 'Ready to answer questions about your document' : 'Please upload a document first'}
-            </p>
-          </div>
+    <div className={styles.messagesContainer}>
+      {messages.length === 0 && (
+        <div className={styles.welcomeMessage}>
+          <FaRobot className={styles.welcomeIcon} />
+          <h4>Chào bạn! Tôi có thể giúp gì cho bạn?</h4>
+          <p>📎 Hãy tải lên một tài liệu (PDF, DOCX, TXT...) và đặt câu hỏi về nội dung của nó!</p>
+          <p style={{marginTop: '8px', fontSize: '12px', color: '#9ca3af'}}>
+            Hoặc bạn có thể chat trực tiếp với tôi về bất kỳ chủ đề nào.
+          </p>
         </div>
-      </div>
+      )}
 
-      <div className={styles.messagesContainer}>
-        {messages.length === 0 && isFileUploaded && (
-          <div className={styles.welcomeMessage}>
-            <FaRobot className={styles.welcomeIcon} />
-            <h4>Welcome! Your document has been processed.</h4>
-            <p>Ask me anything about the content you uploaded.</p>
-          </div>
-        )}
+      {messages.map((msg, index) => (
+        <MessageBubble 
+          key={index}
+          message={msg.content}
+          isUser={msg.role === 'user'}
+          timestamp={msg.timestamp}
+        />
+      ))}
 
-        {messages.map((msg, index) => (
-          <MessageBubble 
-            key={index}
-            message={msg.content}
-            isUser={msg.role === 'user'}
-            timestamp={msg.timestamp}
-          />
-        ))}
-
-        {isLoading && <TypingIndicator />}
-        <div ref={messagesEndRef} />
-      </div>
-
-      <form onSubmit={handleSubmit} className={styles.inputForm}>
-        <div className={styles.inputContainer}>
-          <textarea
-            ref={inputRef}
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            onKeyPress={handleKeyPress}
-            onClick={handleInputClick}
-            placeholder={
-              isFileUploaded 
-                ? "Ask a question about your document..." 
-                : "Upload a document first to start chatting"
-            }
-            className={styles.messageInput}
-            disabled={isLoading}
-            rows={1}
-          />
-          <button 
-            type="submit" 
-            className={styles.sendButton}
-            disabled={!message.trim() || isLoading}
-          >
-            <FaPaperPlane />
-          </button>
+      {isLoading && <TypingIndicator />}
+      
+      {error && (
+        <div className={styles.errorMessage}>
+          <p>{error}</p>
         </div>
-        
-        <div className={styles.inputHint}>
-          <p>Press Enter to send, Shift+Enter for new line</p>
-        </div>
-      </form>
+      )}
+      
+      <div ref={messagesEndRef} />
     </div>
   );
 }

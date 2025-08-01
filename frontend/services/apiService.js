@@ -116,13 +116,34 @@ export const apiService = {
       });
       
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        const errorData = await response.json();
+        throw new Error(errorData.detail || `HTTP error! status: ${response.status}`);
       }
       
       const data = await response.json();
       return { success: true, data };
     } catch (error) {
       console.error("Delete app error:", error);
+      return { success: false, error };
+    }
+  },
+
+  // Toggle app lock status
+  async toggleAppLock(appId) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/app/toggle-lock/${appId}`, {
+        method: "PATCH",
+        headers: getAuthHeaders()
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      return { success: true, data };
+    } catch (error) {
+      console.error("Toggle app lock error:", error);
       return { success: false, error };
     }
   }

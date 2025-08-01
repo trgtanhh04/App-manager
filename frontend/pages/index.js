@@ -23,7 +23,7 @@ export default function Home() {
     refreshAppsOnly
   } = useDashboardData();
 
-  const { createApp, updateApp, deleteApp, isCreating, isUpdating, isDeleting } = useAppsManager();
+  const { createApp, updateApp, deleteApp, toggleAppLock, isCreating, isUpdating, isDeleting } = useAppsManager();
   
   // State cho modal/form
   const [showCreateForm, setShowCreateForm] = useState(false);
@@ -114,6 +114,25 @@ export default function Home() {
     setAppToDelete(null);
   };
 
+  // Toggle app lock
+  const handleToggleLock = async (app) => {
+    try {
+      const result = await toggleAppLock(app._id);
+      
+      if (result.success) {
+        const lockStatus = result.data.is_locked ? 'locked' : 'unlocked';
+        alert(`App "${app.name}" has been ${lockStatus} successfully!`);
+        // Refresh apps data
+        refreshAppsOnly();
+      } else {
+        alert("Error: " + (result.error?.message || "Failed to toggle app lock"));
+      }
+    } catch (error) {
+      console.error("Toggle lock error:", error);
+      alert("Error: " + error.message);
+    }
+  };
+
   // Đóng form
   const handleFormCancel = () => {
     setShowCreateForm(false);
@@ -155,6 +174,7 @@ export default function Home() {
             onViewApp={handleViewApp}
             onEditApp={handleEditApp}
             onDeleteApp={handleDeleteApp}
+            onToggleLock={handleToggleLock}
           />
 
           {/* App Form Modal - Create/Edit */}

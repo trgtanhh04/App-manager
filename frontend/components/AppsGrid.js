@@ -1,8 +1,8 @@
 import Card from "./Card";
-import { FaDesktop, FaMobile, FaGlobe, FaArrowUp, FaEye, FaEdit, FaTrash } from "react-icons/fa";
+import { FaDesktop, FaMobile, FaGlobe, FaArrowUp, FaEye, FaEdit, FaTrash, FaLock, FaUnlock } from "react-icons/fa";
 import styles from "../styles/Dashboard.module.css";
 
-const AppsGrid = ({ appsData, appsStatus, onViewApp, onEditApp, onDeleteApp }) => {
+const AppsGrid = ({ appsData, appsStatus, onViewApp, onEditApp, onDeleteApp, onToggleLock }) => {
   // Hàm lấy icon cho app dựa trên category
   const getAppIcon = (category, index) => {
     const iconMap = {
@@ -78,12 +78,23 @@ const AppsGrid = ({ appsData, appsStatus, onViewApp, onEditApp, onDeleteApp }) =
                   <FaEdit />
                 </button>
                 <button 
-                  className={`${styles.actionBtn} ${styles.deleteBtn}`}
+                  className={`${styles.actionBtn} ${app.is_locked ? styles.lockBtn : styles.unlockBtn}`}
                   onClick={(e) => {
                     e.stopPropagation();
-                    if (onDeleteApp) onDeleteApp(app);
+                    if (onToggleLock) onToggleLock(app);
                   }}
-                  title="Delete App"
+                  title={app.is_locked ? "Unlock App" : "Lock App"}
+                >
+                  {app.is_locked ? <FaLock /> : <FaUnlock />}
+                </button>
+                <button 
+                  className={`${styles.actionBtn} ${styles.deleteBtn} ${app.is_locked ? styles.disabled : ''}`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (!app.is_locked && onDeleteApp) onDeleteApp(app);
+                  }}
+                  title={app.is_locked ? "App is locked - cannot delete" : "Delete App"}
+                  disabled={app.is_locked}
                 >
                   <FaTrash />
                 </button>

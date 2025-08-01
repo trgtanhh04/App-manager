@@ -208,6 +208,20 @@
   color: #dc3545 !important;
 }
 
+.deleteBtn.disabled {
+  opacity: 0.5;
+  cursor: not-allowed !important;
+  pointer-events: none;
+}
+
+.lockBtn:hover {
+  color: #ffc107 !important;
+}
+
+.unlockBtn:hover {
+  color: #28a745 !important;
+}
+
 .bottomGrid {
   display: grid;
   grid-template-columns: 1fr 2fr;

@@ -46,5 +46,25 @@ async def delete_app_endpoint(app_id: str):
     if not existing_app:
         raise HTTPException(status_code=404, detail="App not found")
     
+    # Check if app is locked
+    if existing_app.get("is_locked", False):
+        raise HTTPException(status_code=403, detail="Cannot delete locked app. Please unlock first.")
+    
     deleted_id = await delete_app(app_id)
     return {"status": "app deleted", "app_id": deleted_id}
+
+@app_router.patch("/toggle-lock/{app_id}", dependencies=[Depends(verify_token)])
+async def toggle_app_lock(app_id: str):
+    existing_app = await get_app(app_id)
+    if not existing_app:
+        raise HTTPException(status_code=404, detail="App not found")
+    
+    current_lock_status = existing_app.get("is_locked", False)
+    new_lock_status = not current_lock_status
+    
+    updated_id = await update_app(app_id, {"is_locked": new_lock_status})
+    return {
+        "status": "app lock toggled", 
+        "app_id": updated_id,
+        "is_locked": new_lock_status
+    }

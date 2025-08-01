@@ -16,3 +16,4 @@ class AppSchema(BaseModel):
     frontend_port: Optional[int] = Field(None, example=3001)
     backend_port: Optional[int] = Field(None, example=8001)
     demo_credentials: Optional[str] = Field(None, example="admin@demo.com / demo123")
+    is_locked: Optional[bool] = Field(False, example=False)  # Prevent accidental deletion

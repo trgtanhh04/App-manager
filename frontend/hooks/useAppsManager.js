@@ -71,6 +71,27 @@ export const useAppsManager = () => {
     }
   };
 
+  // Toggle app lock
+  const toggleAppLock = async (appId) => {
+    setIsUpdating(true);
+    setError(null);
+    
+    try {
+      const result = await apiService.toggleAppLock(appId);
+      if (result.success) {
+        return { success: true, data: result.data };
+      } else {
+        setError(result.error.message || "Failed to toggle app lock");
+        return { success: false, error: result.error };
+      }
+    } catch (error) {
+      setError(error.message);
+      return { success: false, error };
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
   // Lấy chi tiết app
   const getAppDetail = async (appId) => {
     try {
@@ -101,6 +122,7 @@ export const useAppsManager = () => {
     createApp,
     updateApp,
     deleteApp,
+    toggleAppLock,
     getAppDetail,
     clearError
   };
